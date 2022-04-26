@@ -39,11 +39,11 @@ export function TopNav(props = {}) {
 
     return <AppBar elevation={1} className={classNames(classes.root)} position="static">
         <Toolbar className="pl-0">
-            <Typography variant="h6" component={Grid} item className="pl-3 font-weight-bold">
-                {$state.current.data?.title || "Page Title"}
-            </Typography>
+            {/*<Typography variant="h6" component={Grid} item className="pl-3 font-weight-bold">*/}
+            {/*    {$state.current.data?.title || "Page Title"}*/}
+            {/*</Typography>*/}
             <Grid item xs>
-                <Typography variant="h6">{user?.firstname} {user?.lastname}</Typography>
+                {/*<Typography variant="h6">{user?.firstname} {user?.lastname}</Typography>*/}
             </Grid>
             {
                 !hideNav ?
@@ -53,7 +53,6 @@ export function TopNav(props = {}) {
                         <Menu
                             id="simple-menu"
                             anchorEl={anchorEl}
-                            // keepMounted
                             open={Boolean(anchorEl)}
                             onClose={handleClose}
                         >

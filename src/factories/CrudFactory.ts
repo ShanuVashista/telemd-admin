@@ -1,10 +1,14 @@
-import {$user} from "./UserFactory";
+import {$user, useCurrentUser} from "./UserFactory";
 import {CrudRequest, RequestOptions} from "@crud/core";
 
 export interface ResponseType<T = any> {
     data: T,
     message: string,
-    status_code: "200" | "400" | "401" | string
+    status: boolean,
+    page?: number,
+    limit?: number,
+    total?: number,
+    totalPages?: number,
 }
 
 const messages = {
@@ -69,11 +73,11 @@ export class CrudFactory extends CrudRequest {
             ...options.headers,
             'Accept': 'application/json',
             "Content-Type": "application/json; charset=utf-8",
-            "Origin":null
+            "Origin": null
 
         };
-        if (url!='login/forgetPassword') {
-            options.headers["Authorization"] = $user.getToken();
+        if (url != 'login/forgetPassword') {
+            options.headers["Authorization"] = `Bearer ${$user.getToken()}`;
         }
 
         if (options.method === "GET") {
@@ -88,15 +92,18 @@ export class CrudFactory extends CrudRequest {
         let res: ResponseType = {
             data: [],
             message: "",
-            status_code: ""
+            status: false,
         };
 
         try {
             const response = await fetch(fullUrl, options);
             if (response.status === 200) {
                 res = await response.json();
-                const {status_code, message = "We're facing some technical issue. Please try again after some time"} = res;
-                const is_success = status_code === "200";
+                const {
+                    status,
+                    message = "We're facing some technical issue. Please try again after some time"
+                } = res;
+                const is_success = status;
                 if (notify && (method !== "GET" || !is_success)) {
                     this.notify({
                         message,
@@ -122,9 +129,9 @@ export class CrudFactory extends CrudRequest {
             throw e;
         }
 
-        const {status_code} = res;
+        const {status} = res;
 
-        if (status_code !== "200")
+        if (!status)
             throw res;
 
         return res;

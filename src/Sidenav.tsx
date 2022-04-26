@@ -1,61 +1,61 @@
 import React from "react";
 import {Divider, Drawer, List, ListItem, makeStyles, Typography} from "@material-ui/core";
-import {$state} from "./router";
+import {UISref} from "@uirouter/react";
 
 const useStyles = makeStyles(({
-   drawer:{
-       width: 240,
-       flexShrink: 0,
-       "& .MuiDrawer-paper": {
-           width: 240,
-           boxSizing: "border-box",
-       }
-   }
+    drawer: {
+        width: 240,
+        flexShrink: 0,
+        "& .MuiDrawer-paper": {
+            width: 240,
+            boxSizing: "border-box",
+        }
+    }
 }));
 
-export function Sidenav(){
+export function Sidenav() {
     const classes = useStyles();
 
     const links = [
         {
             label: "Dashboard",
-            click: () => $state.go("dashboard"),
+            link: "dashboard"
         },
         {
             label: "Doctors",
-            click: () => $state.go("doctors"),
+            link: "doctors"
         },
         {
             label: "Patients",
-            click: () => $state.go("dashboard"),
+            link: "patients"
         },
         {
             label: "Appointments",
-            click: () => $state.go("dashboard"),
+            link: "appointments"
         },
         {
             label: "Corporate Accounts",
-            click: () => $state.go("dashboard"),
+            link: "dashboard"
         },
         {
             label: "Transactions",
-            click: () => $state.go("dashboard"),
+            link: "dashboard"
         },
         {
             label: "Enquiries",
-            click: () => $state.go("dashboard"),
+            link: "dashboard"
         },
         {
             label: "CMS",
-            click: () => $state.go("dashboard"),
+            link: "dashboard"
         },
         {
             label: "Audit Logs",
-            click: () => $state.go("dashboard"),
+            link: "dashboard"
         },
         {
             label: "Settings",
-            click: () => $state.go("dashboard"),
+            link: "dashboard"
         },
     ];
 
@@ -68,13 +68,14 @@ export function Sidenav(){
         <Divider/>
         <List className="p-0">
             {
-                links.map((item) => (
-                    <ListItem button key={item.label} onClick={item.click}>
-                        <Typography variant="subtitle2" className="p-2">
-                            {item.label}
-                        </Typography>
-                    </ListItem>
-                ))
+                links.map((item, i) => <UISref to={item.link} key={i}>
+                        <ListItem button>
+                            <Typography variant="subtitle2" className="p-2">
+                                {item.label}
+                            </Typography>
+                        </ListItem>
+                    </UISref>
+                )
             }
         </List>
     </Drawer>

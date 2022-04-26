@@ -7,11 +7,10 @@ import {MoreVertical} from "react-feather";
 import moment from "moment";
 import {Pagination} from "@material-ui/lab";
 
-export function Doctors() {
-    const [limit, ] = useState(10);
+export function Patients() {
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
-    const [doctors, setDoctors] = useState<UserType[]>([]);
+    const [patients, setPatients] = useState<UserType[]>([]);
     const [loading, setLoading] = useState<Boolean>(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -24,15 +23,15 @@ export function Doctors() {
         setAnchorEl(null);
     };
 
-    const getDoctors = async () => {
+    const getPatients = async () => {
         try {
             setLoading(true);
             const data = await $crud.post("user/list", {
                 page,
-                limit,
-                cond: {role_id: "doctor"}
+                limit: 10,
+                cond: {role_id: "patient"}
             })
-            setDoctors(data.data);
+            setPatients(data.data);
             setPage(data.page);
             setTotalPage(data.totalPages);
         } finally {
@@ -41,8 +40,8 @@ export function Doctors() {
     }
 
     useEffect(() => {
-        getDoctors();
-    }, [page, limit, totalPage]);
+        getPatients();
+    }, [page, totalPage]);
 
     return <Grid className="p-3" container direction="column" wrap="nowrap">
         <Grid
@@ -53,7 +52,7 @@ export function Doctors() {
         >
             <Grid container alignItems="center" className="p-2-all">
                 <Typography variant="h6" component={Grid} item xs className="font-weight-bold pl-3">
-                    Doctors List
+                    Patients List
                 </Typography>
                 <Grid item xs md={4}>
                     <TextField
@@ -86,7 +85,7 @@ export function Doctors() {
                     </thead>
                     <tbody>
                     {
-                        doctors.map((data, i) => <tr key={i} style={{verticalAlign: "middle"}}>
+                        patients.map((data, i) => <tr key={i} style={{verticalAlign: "middle"}}>
                             <td>{i + 1}</td>
                             <td className="text-center">
                                 <img src={data.profile_photo} className="border"
@@ -109,15 +108,17 @@ export function Doctors() {
                     </tbody>
                 </table>
             </Grid>
-            <Grid container justify="flex-end" className="p-2">
-                <Pagination
-                    count={totalPage}
-                    page={page}
-                    onChange={(e, page) => setPage(page)}
-                    variant="outlined"
-                    shape="rounded"
-                />
-            </Grid>
+            {
+                !loading && patients ?   <Grid container justify="flex-end" className="p-2">
+                    <Pagination
+                        count={totalPage}
+                        page={page}
+                        onChange={(e, page) => setPage(page)}
+                        variant="outlined"
+                        shape="rounded"
+                    />
+                </Grid> : ""
+            }
             <Menu
                 anchorEl={anchorEl}
                 open={open}
@@ -133,12 +134,12 @@ export function Doctors() {
 
 export const states: ReactStateDeclaration[] = [
     {
-        url: "/doctors",
-        name: "doctors",
+        url: "/patients",
+        name: "patients",
         data: {
-            title: "Doctors List",
+            title: "Patients List",
             loggedIn: true
         },
-        component: Doctors
+        component: Patients
     }
 ];

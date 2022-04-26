@@ -19,6 +19,16 @@ const states: ReactStateDeclaration[] = [
         name: "doctors.**",
         lazyLoad: () => import("./Doctors")
     },
+    {
+        url: "/patients",
+        name: "patients.**",
+        lazyLoad: () => import("./Patients")
+    },
+    {
+        url: "/appointments",
+        name: "appointments.**",
+        lazyLoad: () => import("./Appointments")
+    },
 ];
 
 states.forEach(state => router.stateRegistry.register(state));

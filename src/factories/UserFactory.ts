@@ -1,5 +1,5 @@
 import {$crud} from "./CrudFactory";
-import {LoginResponseType, UserType} from "../types";
+import {UserType} from "../types";
 import {useSelector} from "react-redux";
 import {AppStateType, SET_USER, store} from "../store";
 
@@ -14,15 +14,14 @@ export class UserFactory {
         const user = this.get();
         store.dispatch({
             type: SET_USER,
-            user: user?.data
+            user: user
         })
     }
 
     async login(params: LoginParams) {
-        this.setToken(btoa(`${params.email}:${params.password}`));
         const {data} = await $crud.post("user/login", params);
-        // console.log(data)
         this.set(data);
+        this.setToken(data.token);
     }
 
     async logout() {
@@ -31,7 +30,7 @@ export class UserFactory {
     }
 
     async current(): Promise<UserType> {
-        return this.get().data;
+        return this.get();
     }
 
     rememberCredentials(credentials: LoginParams) {
@@ -50,15 +49,15 @@ export class UserFactory {
         }
     }
 
-    set(user: LoginResponseType) {
+    set(user: UserType) {
         localStorage.setItem("user", btoa(JSON.stringify(user)));
         store.dispatch({
             type: SET_USER,
-            user: user.data
+            user: user
         })
     }
 
-    get(): LoginResponseType {
+    get(): UserType {
         try {
             return JSON.parse(atob(localStorage.getItem("user")));
         } catch (e) {

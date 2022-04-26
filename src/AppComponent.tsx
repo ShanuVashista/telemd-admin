@@ -29,22 +29,22 @@ const useStyles = makeStyles(({
 }));
 
 $transition.onStart({}, async (trans) => {
-    // const to = trans.to();
-    // const loggedIn = to.data?.loggedIn;
-    // const loggedOut = to.data?.loggedOut;
-    // if (loggedIn || loggedOut) {
-    //     const user = await $user.current();
-    //     if (loggedOut) {
-    //         return $state.target("dashboard", {}, {
-    //             location: "replace"
-    //         });
-    //
-    //     } else if (loggedIn) {
-    //         return $state.target("login", {}, {
-    //             location: "replace"
-    //         })
-    //     }
-    // }
+    const to = trans.to();
+    const loggedIn = to.data?.loggedIn;
+    const loggedOut = to.data?.loggedOut;
+    if (loggedIn || loggedOut) {
+        const user = await $user.current();
+        if (user && loggedOut) {
+            return $state.target("dashboard", {}, {
+                location: "replace"
+            });
+
+        } else if (!user && loggedIn) {
+            return $state.target("login", {}, {
+                location: "replace"
+            })
+        }
+    }
 });
 
 $transition.onBefore({}, () => {
@@ -70,12 +70,15 @@ export function AppComponent() {
             <UIRouter router={router}>
                 <ThemeProvider theme={theme}>
                     <Grid container wrap="nowrap">
-                        <Sidenav/>
+                        {
+                            user &&
+                            <Sidenav/>
+                        }
                         <Grid item xs container direction="column">
-                            {/*{*/}
-                            {/*    user &&*/}
+                            {
+                                user &&
                                 <TopNav/>
-                            {/*}*/}
+                            }
                             <Grid item xs container direction="column" className={classNames(classes.appContainer)}>
                                 <UIView/>
                             </Grid>

@@ -2,16 +2,16 @@ import React, {useEffect, useState} from "react";
 import {Grid, IconButton, LinearProgress, Menu, MenuItem, Paper, TextField, Typography} from "@material-ui/core";
 import {ReactStateDeclaration} from "@uirouter/react";
 import {$crud} from "./factories/CrudFactory";
-import {UserType} from "./types";
+import {AppointmentType, UserType} from "./types";
 import {MoreVertical} from "react-feather";
 import moment from "moment";
 import {Pagination} from "@material-ui/lab";
 
-export function Doctors() {
-    const [limit, ] = useState(10);
+export function Appointments() {
+    const [limit,] = useState(10);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
-    const [doctors, setDoctors] = useState<UserType[]>([]);
+    const [appointments, setAppointments] = useState<AppointmentType[]>([]);
     const [loading, setLoading] = useState<Boolean>(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
@@ -24,15 +24,14 @@ export function Doctors() {
         setAnchorEl(null);
     };
 
-    const getDoctors = async () => {
+    const getAppointments = async () => {
         try {
             setLoading(true);
-            const data = await $crud.post("user/list", {
+            const data = await $crud.post("appointments/list", {
                 page,
-                limit,
-                cond: {role_id: "doctor"}
+                limit
             })
-            setDoctors(data.data);
+            setAppointments(data.data);
             setPage(data.page);
             setTotalPage(data.totalPages);
         } finally {
@@ -41,7 +40,7 @@ export function Doctors() {
     }
 
     useEffect(() => {
-        getDoctors();
+        getAppointments();
     }, [page, limit, totalPage]);
 
     return <Grid className="p-3" container direction="column" wrap="nowrap">
@@ -53,7 +52,7 @@ export function Doctors() {
         >
             <Grid container alignItems="center" className="p-2-all">
                 <Typography variant="h6" component={Grid} item xs className="font-weight-bold pl-3">
-                    Doctors List
+                    Appointments List
                 </Typography>
                 <Grid item xs md={4}>
                     <TextField
@@ -73,32 +72,25 @@ export function Doctors() {
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>Profile Photo</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>D.O.B</th>
-                        <th>Fax</th>
-                        <th>Mobile No.</th>
+                        <th>Patient Name</th>
+                        <th>Appointment Type</th>
+                        <th>Date & Time</th>
+                        <th>Status</th>
+                        <th>IS Emergency</th>
                         <th>CreatedAt</th>
                         <th className="text-right">Action</th>
                     </tr>
                     </thead>
                     <tbody>
                     {
-                        doctors.map((data, i) => <tr key={i} style={{verticalAlign: "middle"}}>
+                        appointments.map((data, i) => <tr key={i} style={{verticalAlign: "middle"}}>
                             <td>{i + 1}</td>
-                            <td className="text-center">
-                                <img src={data.profile_photo} className="border"
-                                     style={{width: 50, height: 50, objectFit: "contain"}}/>
-                            </td>
-                            <td>{data.firstname}</td>
-                            <td>{data.lastname}</td>
-                            <td>{data.email}</td>
-                            <td>{data.dob}</td>
-                            <td>{data.fax}</td>
-                            <td>{data.phone}</td>
-                            <td>{moment(data.createdAt).format("DD-mm-YYYY HH:mm")}</td>
+                            <td>{data.patientId}</td>
+                            <td>{data.appointmentType}</td>
+                            <td>{moment(data.dateOfAppointment).format("DD-mm-YYYY HH:mm")}</td>
+                            <td>{data.status}</td>
+                            <td>{data.isEmergency ? "Yes" : "No"}</td>
+                            <td>{moment(data.updatedAt).format("DD-mm-YYYY HH:mm")}</td>
                             <td className="text-right">
                                 <IconButton size="small" onClick={openMenu}>
                                     <MoreVertical size={16}/>
@@ -133,12 +125,12 @@ export function Doctors() {
 
 export const states: ReactStateDeclaration[] = [
     {
-        url: "/doctors",
-        name: "doctors",
+        url: "/appointments",
+        name: "appointments",
         data: {
-            title: "Doctors List",
+            title: "Appointments List",
             loggedIn: true
         },
-        component: Doctors
+        component: Appointments
     }
 ];
