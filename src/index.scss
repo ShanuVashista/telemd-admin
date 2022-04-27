@@ -20,7 +20,8 @@ body {
   font-size: 0.9rem;
 }
 
-#app, #app > div {
+#app,
+#app>div {
   width: 100%;
   height: 100%;
 }
@@ -34,13 +35,13 @@ button:focus {
 }
 
 .p-2-all {
-  & > :not(.p-2-all) {
+  &> :not(.p-2-all) {
     padding: 0.5rem;
   }
 }
 
 .p-1-all {
-  & > :not(.p-1-all) {
+  &> :not(.p-1-all) {
     padding: 0.25rem;
   }
 }
@@ -56,7 +57,8 @@ button:focus {
 .table {
   margin: 0;
 
-  th, td {
+  th,
+  td {
     padding: 0.5rem;
     white-space: normal;
     word-break: break-word;
@@ -73,4 +75,35 @@ button:focus {
 
 label {
   margin-bottom: 0;
+}
+
+.appointment-list {
+  margin: 20px !important;
+  background: #ebebeb;
+  padding: 12px !important;
+  box-shadow: 0 0 2px 1px #ccc;
+
+  .appointment-content {
+
+    h6 {
+      min-width: 100px;
+    }
+  }
+}
+
+.appointment-details {
+  margin: 0 20px 20px;
+  background: #ebebeb;
+  padding: 12px;
+  box-shadow: 0 0 2px 1px #ccc;
+}
+
+.appointment-content {
+  display: flex;
+  justify-content: space-between;
+
+  //  width: 250px;
+  h6 {
+    font-weight: 500;
+  }
 }

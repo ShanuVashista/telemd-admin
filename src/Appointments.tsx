@@ -1,11 +1,12 @@
-import React, {useEffect, useState} from "react";
-import {Grid, IconButton, LinearProgress, Menu, MenuItem, Paper, TextField, Typography} from "@material-ui/core";
-import {ReactStateDeclaration} from "@uirouter/react";
-import {$crud} from "./factories/CrudFactory";
-import {AppointmentType, UserType} from "./types";
-import {MoreVertical} from "react-feather";
+import React, { useEffect, useState } from "react";
+import { Grid, IconButton, LinearProgress, Menu, MenuItem, Paper, TextField, Typography } from "@material-ui/core";
+import { ReactStateDeclaration } from "@uirouter/react";
+import { $crud } from "./factories/CrudFactory";
+import { AppointmentType, UserType } from "./types";
+import { MoreVertical } from "react-feather";
 import moment from "moment";
-import {Pagination} from "@material-ui/lab";
+import { Pagination } from "@material-ui/lab";
+import PatientModal from "./components/Modal";
 
 export function Appointments() {
     const [limit,] = useState(10);
@@ -22,6 +23,16 @@ export function Appointments() {
 
     const close = () => {
         setAnchorEl(null);
+    };
+
+    const [openModal, setOpenModal] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpenModal(true);
+    };
+
+    const handleClose = () => {
+        setOpenModal(false);
     };
 
     const getAppointments = async () => {
@@ -65,39 +76,39 @@ export function Appointments() {
                 </Grid>
             </Grid>
             {
-                loading && <LinearProgress/>
+                loading && <LinearProgress />
             }
             <Grid className="table-responsive">
                 <table className="table table-bordered table-striped">
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Patient Name</th>
-                        <th>Appointment Type</th>
-                        <th>Date & Time</th>
-                        <th>Status</th>
-                        <th>IS Emergency</th>
-                        <th>CreatedAt</th>
-                        <th className="text-right">Action</th>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Patient Name</th>
+                            <th>Appointment Type</th>
+                            <th>Date & Time</th>
+                            <th>Status</th>
+                            <th>IS Emergency</th>
+                            <th>CreatedAt</th>
+                            <th className="text-right">Action</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {
-                        appointments.map((data, i) => <tr key={i} style={{verticalAlign: "middle"}}>
-                            <td>{i + 1}</td>
-                            <td>{data.patientId}</td>
-                            <td>{data.appointmentType}</td>
-                            <td>{moment(data.dateOfAppointment).format("DD-mm-YYYY HH:mm")}</td>
-                            <td>{data.status}</td>
-                            <td>{data.isEmergency ? "Yes" : "No"}</td>
-                            <td>{moment(data.updatedAt).format("DD-mm-YYYY HH:mm")}</td>
-                            <td className="text-right">
-                                <IconButton size="small" onClick={openMenu}>
-                                    <MoreVertical size={16}/>
-                                </IconButton>
-                            </td>
-                        </tr>)
-                    }
+                        {
+                            appointments.map((data, i) => <tr key={i} style={{ verticalAlign: "middle" }}>
+                                <td>{i + 1}</td>
+                                <td>{data.patient_details.firstname}</td>
+                                <td>{data.appointmentType}</td>
+                                <td>{moment(data.dateOfAppointment).format("DD-mm-YYYY HH:mm")}</td>
+                                <td>{data.status}</td>
+                                <td>{data.isEmergency ? "Yes" : "No"}</td>
+                                <td>{moment(data.updatedAt).format("DD-mm-YYYY HH:mm")}</td>
+                                <td className="text-right">
+                                    <IconButton size="small" onClick={openMenu}>
+                                        <MoreVertical size={16} />
+                                    </IconButton>
+                                </td>
+                            </tr>)
+                        }
                     </tbody>
                 </table>
             </Grid>
@@ -115,10 +126,11 @@ export function Appointments() {
                 open={open}
                 onClose={close}
             >
-                <MenuItem onClick={close}>View</MenuItem>
+                <MenuItem onClick={handleClickOpen}>View</MenuItem>
                 <MenuItem onClick={close}>Delete</MenuItem>
             </Menu>
         </Grid>
+        <PatientModal openModal={openModal} handleClose={handleClose} />
     </Grid>
 }
 

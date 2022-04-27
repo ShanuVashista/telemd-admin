@@ -3,12 +3,12 @@ export interface UserType {
     current_practise_address: [string],
     dob: string,
     email: string,
-    fax: string,
-    firstname: number,
-    lastname: number,
-    password: number,
-    gender: number,
-    phone: string,
+    fax: number,
+    firstname: string,
+    lastname: string,
+    password: string,
+    gender: string,
+    phone: number,
     token: string,
     profile_photo: any,
     role_id: string,
@@ -17,8 +17,8 @@ export interface UserType {
 
 export interface AppointmentType{
     _id: string,
-    patient?: UserType,
-    doctor?: UserType,
+    patient_details?: UserType,
+    doctor_details?: UserType,
     patientId: string
     appointmentType: string
     status: string
