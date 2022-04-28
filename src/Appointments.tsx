@@ -6,18 +6,23 @@ import { AppointmentType, UserType } from "./types";
 import { MoreVertical } from "react-feather";
 import moment from "moment";
 import { Pagination } from "@material-ui/lab";
-import PatientModal from "./components/Modal";
+import Chip from '@material-ui/core/Chip';
+import InfoModal from "./components/Modal";
 
 export function Appointments() {
     const [limit,] = useState(10);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
     const [appointments, setAppointments] = useState<AppointmentType[]>([]);
+    const [selectedAppointment, setSelectedAppointment] = useState<AppointmentType>();
+    const [selectedAppointmentId, setSelectedAppointmentId] = useState<string>();
     const [loading, setLoading] = useState<Boolean>(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+    const [user,setUser] = useState<UserType>();
 
-    const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const openMenu = (event: React.MouseEvent<HTMLButtonElement>, appointmentId) => {
+        setSelectedAppointmentId(appointmentId);
         setAnchorEl(event.currentTarget);
     };
 
@@ -27,7 +32,9 @@ export function Appointments() {
 
     const [openModal, setOpenModal] = React.useState(false);
 
-    const handleClickOpen = () => {
+    const handleClickOpen = (selectedAppointmentId) => {
+        let selectedAppointmentDetails = appointments.find((singleAppointment) => singleAppointment._id === selectedAppointmentId);
+        setSelectedAppointment(selectedAppointmentDetails)
         setOpenModal(true);
     };
 
@@ -96,16 +103,24 @@ export function Appointments() {
                         {
                             appointments.map((data, i) => <tr key={i} style={{ verticalAlign: "middle" }}>
                                 <td>{i + 1}</td>
-                                <td>{data.patient_details.firstname}</td>
+                                <td>{data.patient_details.name}</td>
                                 <td>{data.appointmentType}</td>
                                 <td>{moment(data.dateOfAppointment).format("DD-mm-YYYY HH:mm")}</td>
                                 <td>{data.status}</td>
-                                <td>{data.isEmergency ? "Yes" : "No"}</td>
+                                <td className="text-center">{data.isEmergency ? <Chip label="Yes" style={{backgroundColor:'#ee57579e'}} />: <Chip label="No"  style={{backgroundColor:'#e8e82e78'}}/>}</td>
                                 <td>{moment(data.updatedAt).format("DD-mm-YYYY HH:mm")}</td>
                                 <td className="text-right">
-                                    <IconButton size="small" onClick={openMenu}>
+                                    <IconButton size="small" onClick={(event) => openMenu(event, data._id)}>
                                         <MoreVertical size={16} />
                                     </IconButton>
+                                    <Menu
+                                        anchorEl={anchorEl}
+                                        open={open}
+                                        onClose={close}
+                                    >
+                                        <MenuItem onClick={(e) => handleClickOpen(selectedAppointmentId)}>View</MenuItem>
+                                        <MenuItem onClick={close}>Delete</MenuItem>
+                                    </Menu>
                                 </td>
                             </tr>)
                         }
@@ -121,16 +136,9 @@ export function Appointments() {
                     shape="rounded"
                 />
             </Grid>
-            <Menu
-                anchorEl={anchorEl}
-                open={open}
-                onClose={close}
-            >
-                <MenuItem onClick={handleClickOpen}>View</MenuItem>
-                <MenuItem onClick={close}>Delete</MenuItem>
-            </Menu>
+
         </Grid>
-        <PatientModal openModal={openModal} handleClose={handleClose} />
+        <InfoModal openModal={openModal} handleClose={handleClose} type='all' data={selectedAppointment} userDetails={user}/>
     </Grid>
 }
 

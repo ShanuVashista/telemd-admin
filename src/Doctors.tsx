@@ -1,27 +1,43 @@
-import React, {useEffect, useState} from "react";
-import {Grid, IconButton, LinearProgress, Menu, MenuItem, Paper, TextField, Typography} from "@material-ui/core";
-import {ReactStateDeclaration} from "@uirouter/react";
-import {$crud} from "./factories/CrudFactory";
-import {UserType} from "./types";
-import {MoreVertical} from "react-feather";
+import React, { useEffect, useState } from "react";
+import { Grid, IconButton, LinearProgress, Menu, MenuItem, Paper, TextField, Typography } from "@material-ui/core";
+import { ReactStateDeclaration } from "@uirouter/react";
+import { $crud } from "./factories/CrudFactory";
+import { AppointmentType,UserType } from "./types";
+import { MoreVertical } from "react-feather";
 import moment from "moment";
-import {Pagination} from "@material-ui/lab";
+import { Pagination } from "@material-ui/lab";
+import InfoModal from './components/Modal'
 
 export function Doctors() {
-    const [limit, ] = useState(10);
+    const [limit,] = useState(10);
     const [page, setPage] = useState(1);
     const [totalPage, setTotalPage] = useState(1);
     const [doctors, setDoctors] = useState<UserType[]>([]);
     const [loading, setLoading] = useState<Boolean>(false);
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
+    const [selectedDoctorId, setSelectedDoctorId] = useState<string>();
+    const [selectedDoctorDetails, setSelectedDoctorDetails] = useState<UserType>();
+    const [appointmentData,setAppointmentData] = useState<AppointmentType>();
 
-    const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const openMenu = (event: React.MouseEvent<HTMLButtonElement>, doctorId: string) => {
+        setSelectedDoctorId(doctorId);
         setAnchorEl(event.currentTarget);
     };
 
     const close = () => {
         setAnchorEl(null);
+    };
+
+    const [openModal, setOpenModal] = React.useState(false);
+    const handleClickOpen = (selectedDoctorId) => {
+        let selectedDocotor = doctors.find((singleDocotor) => singleDocotor.id === selectedDoctorId);
+        setSelectedDoctorDetails(selectedDocotor);
+        setOpenModal(true);
+    };
+
+    const handleClose = () => {
+        setOpenModal(false);
     };
 
     const getDoctors = async () => {
@@ -30,7 +46,7 @@ export function Doctors() {
             const data = await $crud.post("user/list", {
                 page,
                 limit,
-                cond: {role_id: "doctor"}
+                cond: { role_id: "doctor" }
             })
             setDoctors(data.data);
             setPage(data.page);
@@ -66,46 +82,52 @@ export function Doctors() {
                 </Grid>
             </Grid>
             {
-                loading && <LinearProgress/>
+                loading && <LinearProgress />
             }
             <Grid className="table-responsive">
                 <table className="table table-bordered table-striped">
                     <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Profile Photo</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Email</th>
-                        <th>D.O.B</th>
-                        <th>Fax</th>
-                        <th>Mobile No.</th>
-                        <th>CreatedAt</th>
-                        <th className="text-right">Action</th>
-                    </tr>
+                        <tr>
+                            <th>#</th>
+                            <th>Profile Photo</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>D.O.B</th>
+                            <th>Fax</th>
+                            <th>Mobile No.</th>
+                            <th>CreatedAt</th>
+                            <th className="text-right">Action</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    {
-                        doctors.map((data, i) => <tr key={i} style={{verticalAlign: "middle"}}>
-                            <td>{i + 1}</td>
-                            <td className="text-center">
-                                <img src={data.profile_photo} className="border"
-                                     style={{width: 50, height: 50, objectFit: "contain"}}/>
-                            </td>
-                            <td>{data.firstname}</td>
-                            <td>{data.lastname}</td>
-                            <td>{data.email}</td>
-                            <td>{data.dob}</td>
-                            <td>{data.fax}</td>
-                            <td>{data.phone}</td>
-                            <td>{moment(data.createdAt).format("DD-mm-YYYY HH:mm")}</td>
-                            <td className="text-right">
-                                <IconButton size="small" onClick={openMenu}>
-                                    <MoreVertical size={16}/>
-                                </IconButton>
-                            </td>
-                        </tr>)
-                    }
+                        {
+                            doctors.map((data, i) => <tr key={i} style={{ verticalAlign: "middle" }}>
+                                <td>{i + 1}</td>
+                                <td className="text-center">
+                                    <img src={data.profile_photo} className="border"
+                                        style={{ width: 50, height: 50, objectFit: "contain" }} />
+                                </td>
+                                <td>{data.name}</td>
+                                <td>{data.email}</td>
+                                <td>{data.dob}</td>
+                                <td>{data.fax}</td>
+                                <td>{data.phone}</td>
+                                <td>{moment(data.createdAt).format("DD-mm-YYYY HH:mm")}</td>
+                                <td className="text-right">
+                                    <IconButton size="small" onClick={(event) => openMenu(event, data.id)}>
+                                        <MoreVertical size={16} />
+                                    </IconButton>
+                                    <Menu
+                                        anchorEl={anchorEl}
+                                        open={open}
+                                        onClose={close}
+                                    >
+                                        <MenuItem onClick={(e) => handleClickOpen(selectedDoctorId)}>View</MenuItem>
+                                        <MenuItem onClick={close}>Delete</MenuItem>
+                                    </Menu>
+                                </td>
+                            </tr>)
+                        }
                     </tbody>
                 </table>
             </Grid>
@@ -118,15 +140,8 @@ export function Doctors() {
                     shape="rounded"
                 />
             </Grid>
-            <Menu
-                anchorEl={anchorEl}
-                open={open}
-                onClose={close}
-            >
-                <MenuItem onClick={close}>View</MenuItem>
-                <MenuItem onClick={close}>Delete</MenuItem>
-            </Menu>
         </Grid>
+        <InfoModal openModal={openModal} handleClose={handleClose} type='doctor' userDetails={selectedDoctorDetails} data={appointmentData}/>
     </Grid>
 }
 

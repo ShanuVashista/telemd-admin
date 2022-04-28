@@ -4,6 +4,7 @@ export interface UserType {
     dob: string,
     email: string,
     fax: number,
+    name:string,
     firstname: string,
     lastname: string,
     password: string,
@@ -12,6 +13,7 @@ export interface UserType {
     token: string,
     profile_photo: any,
     role_id: string,
+    location:string,
     createdAt?: string
 }
 
@@ -25,4 +27,5 @@ export interface AppointmentType{
     dateOfAppointment: string
     isEmergency: boolean
     updatedAt: string
+    symptoms:Array<string> 
 }

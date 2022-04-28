@@ -3,6 +3,10 @@ import { createStyles, Theme, withStyles, WithStyles } from '@material-ui/core/s
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import { AppointmentType, UserType } from "../types";
+import AppointmentInfo from '../components/AppointmentInfo'
+import PatientInfo from '../components/PatientInfo';
+import DoctorInfo from '../components/DoctorInfo'
 // import CloseIcon from '@material-ui/icons/Close';
 import { Grid, Button, Dialog, Paper, IconButton, Typography } from "@material-ui/core";
 
@@ -26,7 +30,9 @@ const styles = (theme: Theme) =>
 export type ModalProps = {
   openModal: boolean;
   handleClose: Function;
-  appointments:appointments
+  data: AppointmentType;
+  type: string;
+  userDetails: UserType;
 }
 
 export interface DialogTitleProps extends WithStyles<typeof styles> {
@@ -62,98 +68,41 @@ const DialogActions = withStyles((theme: Theme) => ({
   },
 }))(MuiDialogActions);
 
-export default function PatientModal({ openModal, handleClose, appointments }: ModalProps) {
+export default function PatientModal(props: ModalProps) {
+
+  let { openModal, handleClose, type, data, userDetails } = props;
+
   return (
     <div>
-      <Dialog onClose={() => handleClose} maxWidth="sm" fullWidth aria-labelledby="customized-dialog-title" open={openModal}>
+      <Dialog onClose={() => handleClose} maxWidth="md" fullWidth aria-labelledby="customized-dialog-title" open={openModal}>
         <DialogTitle id="customized-dialog-title" onClose={() => handleClose}>
-          Appointment Title
+          {type === 'all' && 'Appointment Title'}
+          {type === 'doctor' && 'Doctor Info'}
+          {type === 'patient' && 'Patient Info'}
         </DialogTitle>
         <DialogContent dividers>
-          <Grid container spacing={3}>
+          {/* appointment section start here */}
+          {type == 'all' && <Grid container spacing={3}>
             <Grid item sm={12} className="appointment-list">
-              <div className="appointment-content">
-                <Typography variant="h6">Name</Typography>
-                {/* <span>:</span> */}
-                <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-              </div>
-              <div className="appointment-content">
-                <Typography variant="h6">Patient Id</Typography>
-                {/* <span>:</span> */}
-                <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-              </div>
-              <div className="appointment-content">
-                <Typography variant="h6">Appointment Type</Typography>
-                {/* <span>:</span> */}
-                <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-              </div>
-              <div className="appointment-content">
-                <Typography variant="h6">Status</Typography>
-                {/* <span>:</span> */}
-                <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-              </div>
-              <div className="appointment-content">
-                <Typography variant="h6">Is Emergency</Typography>
-                {/* <span>:</span> */}
-                <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-              </div>
+              <AppointmentInfo selectedAppointment={data} />
             </Grid>
-          </Grid>
+          </Grid>}
+
           <Grid container spacing={3}>
-            <Grid sm={6} item>
-              <Typography variant="h5">
+            {/* patient section start here */}
+            {(type === 'all' || type === 'patient') && <Grid sm={(type == 'all' ? 6 : 12)} item>
+              {type === 'all' && <Typography variant="h5">
                 Patient Info:
-              </Typography>
-              <div className="appointment-details">
-                <div className="appointment-content">
-                  <Typography variant="h6">Name:</Typography>
-                  <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-                </div>
-                <div className="appointment-content">
-                  <Typography variant="h6">Patient Id:</Typography>
-                  <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-                </div>
-                <div className="appointment-content">
-                  <Typography variant="h6">Phone:</Typography>
-                  <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-                </div>
-                <div className="appointment-content">
-                  <Typography variant="h6">Profile Photo:</Typography>
-                  <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-                </div>
-                <div className="appointment-content">
-                  <Typography variant="h6">Date:</Typography>
-                  <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-                </div>
-              </div>
-            </Grid>
-            <Grid sm={6} item>
-              <Typography variant="h5">
+              </Typography>}
+              <PatientInfo patientInfo={(type === 'patient' && userDetails ? userDetails : null) || (type === 'all' && data ? data.patient_details : null)} />
+            </Grid>}
+            {/* doctor section start here */}
+            {(type === 'all' || type === 'doctor') && <Grid sm={(type == 'all' ? 6 : 12)} item>
+              {type === 'all' && <Typography variant="h5">
                 Doctor Info:
-              </Typography>
-              <div className="appointment-details">
-                <div className="appointment-content">
-                  <Typography variant="h6">Name:</Typography>
-                  <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-                </div>
-                <div className="appointment-content">
-                  <Typography variant="h6">Doctor Id:</Typography>
-                  <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-                </div>
-                <div className="appointment-content">
-                  <Typography variant="h6">Phone:</Typography>
-                  <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-                </div>
-                <div className="appointment-content">
-                  <Typography variant="h6">Profile Photo:</Typography>
-                  <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-                </div>
-                <div className="appointment-content">
-                  <Typography variant="h6">Date:</Typography>
-                  <Typography variant="body1" style={{ marginLeft: 10 }}>test</Typography>
-                </div>
-              </div>
-            </Grid>
+              </Typography>}
+              <DoctorInfo doctorInfo={(type === 'doctor' && userDetails ? userDetails : null) || (type === 'all' && data ? data.patient_details : null)} />
+            </Grid>}
           </Grid>
         </DialogContent>
         <DialogActions>
