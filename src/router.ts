@@ -29,6 +29,11 @@ const states: ReactStateDeclaration[] = [
         name: "appointments.**",
         lazyLoad: () => import("./Appointments")
     },
+    {
+        url: "/transactions",
+        name: "transactions.**",
+        lazyLoad: () => import("./Transactions")
+    },
 ];
 
 states.forEach(state => router.stateRegistry.register(state));

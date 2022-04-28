@@ -39,7 +39,7 @@ export function Sidenav() {
         },
         {
             label: "Transactions",
-            link: "dashboard"
+            link: "transactions"
         },
         {
             label: "Enquiries",
