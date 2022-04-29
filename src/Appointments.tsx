@@ -113,20 +113,20 @@ export function Appointments() {
                                     <IconButton size="small" onClick={(event) => openMenu(event, data._id)}>
                                         <MoreVertical size={16} />
                                     </IconButton>
-                                    <Menu
-                                        anchorEl={anchorEl}
-                                        open={open}
-                                        onClose={close}
-                                    >
-                                        <MenuItem onClick={(e) => handleClickOpen(selectedAppointmentId)}>View</MenuItem>
-                                        <MenuItem onClick={close}>Delete</MenuItem>
-                                    </Menu>
                                 </td>
                             </tr>)
                         }
                     </tbody>
                 </table>
             </Grid>
+            <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={close}
+            >
+                <MenuItem onClick={(e) => handleClickOpen(selectedAppointmentId)}>View</MenuItem>
+                <MenuItem onClick={close}>Delete</MenuItem>
+            </Menu>
             <Grid container justify="flex-end" className="p-2">
                 <Pagination
                     count={totalPage}

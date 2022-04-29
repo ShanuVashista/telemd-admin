@@ -116,20 +116,20 @@ export function Patients() {
                                     <IconButton size="small" onClick={(event) => openMenu(event, data.id)}>
                                         <MoreVertical size={16} />
                                     </IconButton>
-                                    <Menu
-                                        anchorEl={anchorEl}
-                                        open={open}
-                                        onClose={close}
-                                    >
-                                        <MenuItem onClick={(e) => handleClickOpen(selectedPatientId)}>View</MenuItem>
-                                        <MenuItem onClick={close}>Delete</MenuItem>
-                                    </Menu>
                                 </td>
                             </tr>)
                         }
                     </tbody>
                 </table>
             </Grid>
+            <Menu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={close}
+            >
+                <MenuItem onClick={(e) => handleClickOpen(selectedPatientId)}>View</MenuItem>
+                <MenuItem onClick={close}>Delete</MenuItem>
+            </Menu>
             {
                 !loading && patients ? <Grid container justify="flex-end" className="p-2">
                     <Pagination
