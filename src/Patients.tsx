@@ -103,10 +103,13 @@ export function Patients() {
                             patients.map((data, i) => <tr key={i} style={{ verticalAlign: "middle" }}>
                                 <td>{i + 1}</td>
                                 <td className="text-center">
-                                    <img src={data.profile_photo} className="border"
-                                        style={{ width: 50, height: 50, objectFit: "contain" }} />
+                                    <img
+                                        src={data.profile_photo || require("assets/images/default.png")}
+                                        className="border"
+                                        style={{width: 50, height: 50, objectFit: "contain"}}
+                                    />
                                 </td>
-                                <td>{data.name}</td>
+                                <td>{data.firstname} {data.lastname}</td>
                                 <td>{data.email}</td>
                                 <td>{data.dob}</td>
                                 <td>{data.fax}</td>

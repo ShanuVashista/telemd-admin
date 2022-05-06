@@ -3,7 +3,7 @@ import {Grid} from "@material-ui/core";
 import {ReactStateDeclaration} from "@uirouter/react";
 
 export function Dashboard(){
-    return <Grid>new</Grid>
+    return <Grid className="p-3">Dashboard</Grid>
 }
 
 

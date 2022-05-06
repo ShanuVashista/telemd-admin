@@ -6,6 +6,7 @@ import {UserType} from "./types";
 import {MoreVertical} from "react-feather";
 import moment from "moment";
 import {Pagination} from "@material-ui/lab";
+import classNames from "classnames";
 
 export function Doctors() {
     const [limit,] = useState(10);
@@ -27,7 +28,7 @@ export function Doctors() {
             const data = await $crud.post("user/list", {
                 page,
                 limit,
-                cond: { role_id: "doctor" }
+                cond: {role_id: "doctor"}
             })
             setDoctors(data.data);
             setPage(data.page);
@@ -38,13 +39,13 @@ export function Doctors() {
     }
 
     const approved = async (id) => {
-      try {
-          setLoading(true);
-          await $crud.put("user/admin/doctorApprove", {id})
-      } finally {
-          setLoading(false);
-          getDoctors();
-      }
+        try {
+            setLoading(true);
+            await $crud.put("user/admin/doctorApprove", {id})
+        } finally {
+            setLoading(false);
+            getDoctors();
+        }
     };
 
     useEffect(() => {
@@ -73,49 +74,56 @@ export function Doctors() {
                 </Grid>
             </Grid>
             {
-                loading && <LinearProgress />
+                loading && <LinearProgress/>
             }
             <Grid className="table-responsive">
                 <table className="table table-bordered table-striped">
                     <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Profile Photo</th>
-                            <th>Name</th>
-                            <th>Email</th>
-                            <th>D.O.B</th>
-                            <th>Fax</th>
-                            <th>Mobile No.</th>
-                            <th>CreatedAt</th>
-                            <th className="text-right">Action</th>
-                        </tr>
+                    <tr>
+                        <th>#</th>
+                        <th>Profile Photo</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>D.O.B</th>
+                        <th>Fax</th>
+                        <th>Mobile No.</th>
+                        <th>Approved</th>
+                        <th>CreatedAt</th>
+                        <th className="text-right">Action</th>
+                    </tr>
                     </thead>
                     <tbody>
-                        {
-                            doctors.map((data, i) => <tr key={i} style={{ verticalAlign: "middle" }}>
-                                <td>{i + 1}</td>
-                                <td className="text-center">
-                                    <img src={data.profile_photo} className="border"
-                                        style={{ width: 50, height: 50, objectFit: "contain" }} />
-                                </td>
-                                <td>{data.name}</td>
-                                <td>{data.email}</td>
-                                <td>{data.dob}</td>
-                                <td>{data.fax}</td>
-                                <td>{data.phone}</td>
-                                <td>{moment(data.createdAt).format("DD-mm-YYYY HH:mm")}</td>
-                                <td className="text-right">
-                                    <IconButton size="small" onClick={
-                                        (e) => {
-                                            setAnchorEl(e.currentTarget);
-                                            setDoctor(data);
-                                        }
-                                    }>
-                                        <MoreVertical size={16} />
-                                    </IconButton>
-                                </td>
-                            </tr>)
-                        }
+                    {
+                        doctors.map((data, i) => <tr key={i} style={{verticalAlign: "middle"}}>
+                            <td>{i + 1}</td>
+                            <td className="text-center">
+                                <img
+                                    src={data.profile_photo || require("assets/images/default.png")}
+                                    className="border"
+                                    style={{width: 50, height: 50, objectFit: "contain"}}
+                                />
+                            </td>
+                            <td>{data.firstname} {data.lastname}</td>
+                            <td>{data.email}</td>
+                            <td>{data.dob}</td>
+                            <td>{data.fax}</td>
+                            <td>{data.phone}</td>
+                            <td className={classNames(data.isApproved ? "text-success" : "text-danger")}>
+                                {data.isApproved ? "Approved" : "Not Approved"}
+                            </td>
+                            <td>{moment(data.createdAt).format("DD-mm-YYYY HH:mm")}</td>
+                            <td className="text-right">
+                                <IconButton size="small" onClick={
+                                    (e) => {
+                                        setAnchorEl(e.currentTarget);
+                                        setDoctor(data);
+                                    }
+                                }>
+                                    <MoreVertical size={16}/>
+                                </IconButton>
+                            </td>
+                        </tr>)
+                    }
                     </tbody>
                 </table>
             </Grid>
