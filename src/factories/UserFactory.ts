@@ -19,7 +19,7 @@ export class UserFactory {
     }
 
     async login(params: LoginParams) {
-        const {data} = await $crud.post("user/login", params);
+        const {data} = await $crud.post("user/admin/login", params);
         this.set(data);
         this.setToken(data.token);
     }

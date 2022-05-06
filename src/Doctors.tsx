@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Grid, IconButton, LinearProgress, Menu, MenuItem, Paper, TextField, Typography } from "@material-ui/core";
-import { ReactStateDeclaration } from "@uirouter/react";
-import { $crud } from "./factories/CrudFactory";
-import { AppointmentType,UserType } from "./types";
-import { MoreVertical } from "react-feather";
+import React, {useEffect, useState} from "react";
+import {Grid, IconButton, LinearProgress, Menu, MenuItem, Paper, TextField, Typography} from "@material-ui/core";
+import {ReactStateDeclaration} from "@uirouter/react";
+import {$crud} from "./factories/CrudFactory";
+import {UserType} from "./types";
+import {MoreVertical} from "react-feather";
 import moment from "moment";
-import { Pagination } from "@material-ui/lab";
-import InfoModal from './components/Modal'
+import {Pagination} from "@material-ui/lab";
 
 export function Doctors() {
     const [limit,] = useState(10);
@@ -14,30 +13,12 @@ export function Doctors() {
     const [totalPage, setTotalPage] = useState(1);
     const [doctors, setDoctors] = useState<UserType[]>([]);
     const [loading, setLoading] = useState<Boolean>(false);
-    const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+    const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
-    const [selectedDoctorId, setSelectedDoctorId] = useState<string>();
-    const [selectedDoctorDetails, setSelectedDoctorDetails] = useState<UserType>();
-    const [appointmentData,setAppointmentData] = useState<AppointmentType>();
-
-    const openMenu = (event: React.MouseEvent<HTMLButtonElement>, doctorId: string) => {
-        setSelectedDoctorId(doctorId);
-        setAnchorEl(event.currentTarget);
-    };
+    const [doctor, setDoctor] = useState<UserType>(null);
 
     const close = () => {
         setAnchorEl(null);
-    };
-
-    const [openModal, setOpenModal] = React.useState(false);
-    const handleClickOpen = (selectedDoctorId) => {
-        let selectedDocotor = doctors.find((singleDocotor) => singleDocotor.id === selectedDoctorId);
-        setSelectedDoctorDetails(selectedDocotor);
-        setOpenModal(true);
-    };
-
-    const handleClose = () => {
-        setOpenModal(false);
     };
 
     const getDoctors = async () => {
@@ -55,6 +36,16 @@ export function Doctors() {
             setLoading(false);
         }
     }
+
+    const approved = async (id) => {
+      try {
+          setLoading(true);
+          await $crud.put("user/admin/doctorApprove", {id})
+      } finally {
+          setLoading(false);
+          getDoctors();
+      }
+    };
 
     useEffect(() => {
         getDoctors();
@@ -114,7 +105,12 @@ export function Doctors() {
                                 <td>{data.phone}</td>
                                 <td>{moment(data.createdAt).format("DD-mm-YYYY HH:mm")}</td>
                                 <td className="text-right">
-                                    <IconButton size="small" onClick={(event) => openMenu(event, data.id)}>
+                                    <IconButton size="small" onClick={
+                                        (e) => {
+                                            setAnchorEl(e.currentTarget);
+                                            setDoctor(data);
+                                        }
+                                    }>
                                         <MoreVertical size={16} />
                                     </IconButton>
                                 </td>
@@ -128,7 +124,15 @@ export function Doctors() {
                 open={open}
                 onClose={close}
             >
-                <MenuItem onClick={(e) => handleClickOpen(selectedDoctorId)}>View</MenuItem>
+                <MenuItem onClick={close}>
+                    View
+                </MenuItem>
+                <MenuItem disabled={doctor?.isApproved} onClick={() => {
+                    approved(doctor.id);
+                    close();
+                }}>
+                    Approve
+                </MenuItem>
                 <MenuItem onClick={close}>Delete</MenuItem>
             </Menu>
             <Grid container justify="flex-end" className="p-2">
@@ -141,7 +145,6 @@ export function Doctors() {
                 />
             </Grid>
         </Grid>
-        <InfoModal openModal={openModal} handleClose={handleClose} type='doctor' userDetails={selectedDoctorDetails} data={appointmentData}/>
     </Grid>
 }
 

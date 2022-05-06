@@ -14,7 +14,8 @@ export interface UserType {
     profile_photo: any,
     role_id: string,
     location:string,
-    createdAt?: string
+    createdAt?: string,
+    isApproved?: boolean
 }
 
 export interface AppointmentType{

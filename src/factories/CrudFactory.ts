@@ -76,7 +76,7 @@ export class CrudFactory extends CrudRequest {
             "Origin": null
 
         };
-        if (url != 'login/forgetPassword') {
+        if (url != '/login') {
             options.headers["Authorization"] = `Bearer ${$user.getToken()}`;
         }
 
