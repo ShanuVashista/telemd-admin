@@ -1,5 +1,6 @@
 export interface UserType {
     id: string,
+    _id?: string,
     current_practise_address: [string],
     dob: string,
     email: string,

@@ -136,7 +136,7 @@ export function Doctors() {
                     View
                 </MenuItem>
                 <MenuItem disabled={doctor?.isApproved} onClick={() => {
-                    approved(doctor.id);
+                    approved(doctor._id);
                     close();
                 }}>
                     Approve
