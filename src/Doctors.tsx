@@ -107,6 +107,7 @@ export function Doctors() {
 
   useEffect(() => {
     getDoctors();
+    getCountryList();
   }, [page, limit, totalPage]);
 
   return (
