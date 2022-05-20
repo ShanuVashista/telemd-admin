@@ -8,6 +8,10 @@ import {
   Paper,
   TextField,
   Typography,
+  Chip,
+  Box,
+  Select,
+  OutlinedInput,
 } from "@material-ui/core";
 import { ReactStateDeclaration } from "@uirouter/react";
 import { $crud } from "./factories/CrudFactory";
@@ -16,6 +20,7 @@ import { MoreVertical } from "react-feather";
 import moment from "moment";
 import { Pagination } from "@material-ui/lab";
 import classNames from "classnames";
+import Autocomplete from "@material-ui/lab/Autocomplete";
 
 export function Doctors() {
   const [limit] = useState(10);
@@ -27,24 +32,58 @@ export function Doctors() {
   const open = Boolean(anchorEl);
   const [doctor, setDoctor] = useState<UserType>(null);
   const [searchValue, setSearchValue] = useState("");
+  const [countryList, setCountryList] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState();
+  let [status, setStatus] = useState<string>("");
 
   const close = () => {
     setAnchorEl(null);
   };
 
+  const getCountryList = async () => {
+    try {
+      setLoading(true);
+      const data = await $crud.get("get/countryname", {});
+      setCountryList(data.data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getDoctors = async () => {
     try {
       setLoading(true);
+      let cond = {};
+      if (status === "") {
+        cond = { role_id: "doctor", search: searchValue };
+      } else {
+        cond = { role_id: "doctor", search: searchValue, status: status };
+      }
       const data = await $crud.post("user/list", {
         page,
         limit,
-        cond: { role_id: "doctor", search: searchValue },
+        cond: cond,
       });
       setDoctors(data.data);
       setPage(data.page);
       setTotalPage(data.totalPages);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleChangeStatus = async (e) => {
+    await setStatus(e.target.value);
+
+    status = e.target.value;
+    if (status == "") {
+      getDoctors();
+    } else if (status == "enable") {
+      getDoctors();
+    } else if (status == "disable") {
+      getDoctors();
+    } else {
+      console.log("1111");
     }
   };
 
@@ -95,6 +134,52 @@ export function Doctors() {
               color="primary"
             />
           </Grid>
+          <Grid item xs md={4}>
+            <Select
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={status}
+              label="Status"
+              onChange={handleChangeStatus}
+            >
+              <MenuItem value="">All</MenuItem>
+              <MenuItem value="enable">Approved</MenuItem>
+              <MenuItem value="disable">Not Approved</MenuItem>
+            </Select>
+          </Grid>
+          {/* <Grid item xs md={4}> */}
+          {/* <Select
+              fullWidth
+              label="Select Country Name"
+              variant="outlined"
+              color="primary"
+              name="selectedCountry"
+              value={selectedCountry}
+              onChange={(e) => setSelectedCountry(e.target.value)}
+            >
+              {countryList.map((item, i) => (
+                <MenuItem key={i} value={item.countyName}>
+                  {item.countyName}
+                </MenuItem>
+              ))}
+            </Select> */}
+          {/* <Autocomplete
+              id="size-small-standard"
+              size="small"
+              options={countryList}
+              getOptionLabel={(option) => option.countyName}
+              defaultValue={countryList[13]}
+              onChange={(e) => setSelectedCountry("country", e.target.value)}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="standard"
+                  label="Country-List"
+                  placeholder="Country-List"
+                />
+              )}
+            /> */}
+          {/* </Grid> */}
         </Grid>
         {loading && <LinearProgress />}
         <Grid className="table-responsive">
@@ -108,7 +193,7 @@ export function Doctors() {
                 <th>D.O.B</th>
                 <th>Fax</th>
                 <th>Mobile No.</th>
-                <th>Approved</th>
+                <th>Status</th>
                 <th>CreatedAt</th>
                 <th className="text-right">Action</th>
               </tr>
@@ -136,10 +221,12 @@ export function Doctors() {
                   <td>{data.phone}</td>
                   <td
                     className={classNames(
-                      data.isApproved ? "text-success" : "text-danger"
+                      data["status"] === "enable"
+                        ? "text-success"
+                        : "text-danger"
                     )}
                   >
-                    {data.isApproved ? "Approved" : "Not Approved"}
+                    {data["status"] === "enable" ? "Approved" : "Not Approved"}
                   </td>
                   <td>{moment(data.createdAt).format("DD-mm-YYYY HH:mm")}</td>
                   <td className="text-right">
