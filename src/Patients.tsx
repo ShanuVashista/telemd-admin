@@ -8,6 +8,7 @@ import {
   Paper,
   TextField,
   Typography,
+  Select,
 } from "@material-ui/core";
 import { ReactStateDeclaration } from "@uirouter/react";
 import { $crud } from "./factories/CrudFactory";
@@ -29,6 +30,8 @@ export function Patients() {
   const [selectedPatientDetails, setSelectedPatientDetails] =
     useState<UserType>();
   const [searchValue, setSearchValue] = useState("");
+  const [countryList, setCountryList] = useState([]);
+  const [selectedCountry, setSelectedCountry] = useState();
 
   const openMenu = (
     event: React.MouseEvent<HTMLButtonElement>,
@@ -55,9 +58,20 @@ export function Patients() {
     setOpenModal(true);
   };
 
+  const getCountryList = async () => {
+    try {
+      setLoading(true);
+      const data = await $crud.get("get/countryname", {});
+      setCountryList(data.data);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const getPatients = async () => {
     try {
       setLoading(true);
+
       const data = await $crud.post("user/list", {
         page,
         limit: 10,
@@ -81,6 +95,7 @@ export function Patients() {
 
   useEffect(() => {
     getPatients();
+    getCountryList();
   }, [page, totalPage]);
 
   return (
