@@ -12,11 +12,11 @@ export default function PatientInfo({ patientInfo }: ModalProps) {
             <div className="appointment-details">
                 <div className="appointment-content">
                     <Typography variant="h6">Patient Id:</Typography>
-                    <Typography variant="body1" style={{ marginLeft: 10 }}>{patientInfo ? patientInfo.id : null}</Typography>
+                    <Typography variant="body1" style={{ marginLeft: 10 }}>{patientInfo ? patientInfo._id : null}</Typography>
                 </div>
                 <div className="appointment-content">
                     <Typography variant="h6">Patient name:</Typography>
-                    <Typography variant="body1" style={{ marginLeft: 10 }}>{patientInfo ? patientInfo.name : null}</Typography>
+                    <Typography variant="body1" style={{ marginLeft: 10 }}>{patientInfo ? `${patientInfo.firstname || ''} ${patientInfo.lastname || ''}` : null}</Typography>
                 </div>
                 <div className="appointment-content">
                     <Typography variant="h6">DOB:</Typography>
