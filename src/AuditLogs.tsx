@@ -25,6 +25,7 @@ export function AuditLogs() {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const [auditLogData, setAuditLogData] = useState<AuditLogType>();
+  const [data,setData]=useState<any>()
   let [selectedAuditLogId, setSelectedAuditLogId] = useState<string>();
   let [selectedAuditLogDetails, setSelectedAuditLogDetails] =
     useState<UserType>();
@@ -46,19 +47,19 @@ export function AuditLogs() {
     }
   };
 
-  const openMenu = async (
-    event: React.MouseEvent<HTMLButtonElement>,
-    _id: string
-  ) => {
-    let selectedAuditLogId = _id;
+  // const openMenu = async (
+  //   event: React.MouseEvent<HTMLButtonElement>,
+  //   _id: string
+  // ) => {
+  //   let selectedAuditLogId = _id;
 
-    setAnchorEl(event.currentTarget);
-    if (selectedAuditLogId !== undefined) {
-      handleClickOpen(selectedAuditLogId);
-    } else {
-      console.log("dfsndvsn ds");
-    }
-  };
+  //   setAnchorEl(event.currentTarget);
+  //   if (selectedAuditLogId !== undefined) {
+  //     handleClickOpen(selectedAuditLogId);
+  //   } else {
+  //     console.log("dfsndvsn ds");
+  //   }
+  // };
 
   const close = () => {
     setAnchorEl(null);
@@ -157,13 +158,13 @@ export function AuditLogs() {
                         variant="outlined"
                         size="small"
                         color="primary"
-                        onClick={(event) => openMenu(event, data._id)}
+                        // onClick={(event) => openMenu(event, data._id)}
+                        onClick={() => {
+                          setOpenModal(true);
+                          setData(data)
+                          }}
                       >
-                        <MenuItem
-                          onClick={(e) => handleClickOpen(selectedAuditLogId)}
-                        >
-                          View
-                        </MenuItem>
+                       View
                       </Button>
                     </td>
                   </tr>
@@ -171,11 +172,6 @@ export function AuditLogs() {
             </tbody>
           </table>
         </Grid>
-        <Menu anchorEl={anchorEl} open={open} onClose={close}>
-          <MenuItem onClick={(e) => handleClickOpen(selectedAuditLogId)}>
-            View
-          </MenuItem>
-        </Menu>
         {!loading && auditLog ? (
           <Grid container justify="flex-end" className="p-2">
             <Pagination
@@ -195,7 +191,7 @@ export function AuditLogs() {
         handleClose={handleClose}
         type="auditLog"
         userDetails={selectedAuditLogDetails}
-        data={auditLogData}
+        data={data}
       />
     </Grid>
   );

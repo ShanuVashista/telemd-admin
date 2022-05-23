@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import SimpleCard from "./components/Dashboard/cards";
 import { Card } from "@material-ui/core";
 import UserCard from "./components/Dashboard/userCards";
+import {Users,BookOpen, Zap, FastForward, UserCheck, UserX} from "react-feather"
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -25,23 +26,24 @@ const useStyles = makeStyles((theme: Theme) =>
 export function Dashboard() {
     const classes = useStyles();
     return (
-        <div className={classes.root}>
+        <Grid className="p-3" container direction="column" wrap="nowrap">
             <Grid container spacing={2}>
                 <Grid item xs={6} >
                     <Card>
                         <Paper variant="outlined" square className={classes.paper}>
+                        <BookOpen color="green" size={28}/>
                             Appointments
                         </Paper>
 
-                        <Grid container spacing={2} className={classes.root}>
-                            <Grid item xs={4}>
-                                <SimpleCard title="In Progress" appointments={5} />
+                        <Grid container spacing={2} className="p-3">
+                            <Grid item xs={12} md={4} sm={6}>
+                                <SimpleCard title="Completed" appointments={5} Titleicon={<UserCheck color="green" size={14}/>} />
                             </Grid>
-                            <Grid item xs={4}>
-                                <SimpleCard title="Upcoming" appointments={10} />
+                            <Grid item xs={12} md={4} sm={6} >
+                                <SimpleCard title="Upcoming" appointments={10} Titleicon={<FastForward color="orange" size={14}/>}/>
                             </Grid>
-                            <Grid item xs={4}>
-                                <SimpleCard title="Rejected" appointments={3} />
+                            <Grid item xs={12} md={4} sm={6}>
+                                <SimpleCard title="Rejected" appointments={3} Titleicon={<UserX color="red" size={14}/>}/>
                             </Grid>
                         </Grid>
                     </Card>
@@ -50,10 +52,11 @@ export function Dashboard() {
                 <Grid item xs={6}>
                     <Card>
                         <Paper variant="outlined" square className={classes.paper}>
+                        <Users color="black" size={28}/>
                             Users
                         </Paper>
 
-                        <Grid container spacing={2} className={classes.root}>
+                        <Grid container spacing={2} className="p-3">
                             <Grid item xs={6} >
                                 <UserCard title="Doctors" appointments={5} />
                             </Grid>
@@ -84,7 +87,7 @@ export function Dashboard() {
                 
 
             </Grid>
-        </div>
+            </Grid>
     )
 }
 
