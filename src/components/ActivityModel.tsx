@@ -1,135 +1,132 @@
-import React, {useEffect} from "react";
-import {createStyles, Theme, withStyles, WithStyles,} from "@material-ui/core/styles";
-import MuiDialogContent from "@material-ui/core/DialogContent";
-import MuiDialogActions from "@material-ui/core/DialogActions";
-import MuiDialogTitle from "@material-ui/core/DialogTitle";
-import {Button, Dialog, Grid, IconButton, Typography,} from "@material-ui/core";
+import React, { useEffect } from 'react';
+import {
+  createStyles,
+  Theme,
+  withStyles,
+  WithStyles,
+} from '@material-ui/core/styles';
+import MuiDialogContent from '@material-ui/core/DialogContent';
+import MuiDialogActions from '@material-ui/core/DialogActions';
+import MuiDialogTitle from '@material-ui/core/DialogTitle';
+import {
+  Button,
+  Dialog,
+  Grid,
+  IconButton,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+  Typography,
+} from '@material-ui/core';
 
 const styles = (theme: Theme) =>
-    createStyles({
-        root: {
-            margin: 0,
-            padding: theme.spacing(2),
-        },
-        closeButton: {
-            position: "absolute",
-            right: theme.spacing(1),
-            top: theme.spacing(1),
-            color: theme.palette.grey[500],
-        },
-        listView: {},
-    });
+  createStyles({
+    root: {
+      margin: 0,
+      padding: theme.spacing(2),
+    },
+    closeButton: {
+      position: 'absolute',
+      right: theme.spacing(1),
+      top: theme.spacing(1),
+      color: theme.palette.grey[500],
+    },
+    listView: {},
+  });
 
 export type ModalProps = {
-    openModal: boolean;
-    handleClose: Function;
-    data: any;
-    type: string;
+  openModal: boolean;
+  handleClose: Function;
+  data: any;
+  type: string;
 };
 
 export interface DialogTitleProps extends WithStyles<typeof styles> {
-    id: string;
-    children: React.ReactNode;
-    onClose: () => void;
+  id: string;
+  children: React.ReactNode;
+  onClose: () => void;
 }
 
 const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
-    const {children, classes, onClose, ...other} = props;
-    return (
-        <MuiDialogTitle disableTypography className={classes.root} {...other}>
-            <Typography variant="h6">{children}</Typography>
-            {onClose ? (
-                <IconButton
-                    aria-label="close"
-                    className={classes.closeButton}
-                    onClick={onClose}
-                >
-                    {/* <CloseIcon /> */}
-                </IconButton>
-            ) : null}
-        </MuiDialogTitle>
-    );
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant='h6'>{children}</Typography>
+      {onClose ? (
+        <IconButton
+          aria-label='close'
+          className={classes.closeButton}
+          onClick={onClose}
+        >
+          {/* <CloseIcon /> */}
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
 });
 
 const DialogContent = withStyles((theme: Theme) => ({
-    root: {
-        padding: theme.spacing(2),
-    },
+  root: {
+    padding: theme.spacing(2),
+  },
 }))(MuiDialogContent);
 
 const DialogActions = withStyles((theme: Theme) => ({
-    root: {
-        margin: 0,
-        padding: theme.spacing(1),
-    },
+  root: {
+    margin: 0,
+    padding: theme.spacing(1),
+  },
 }))(MuiDialogActions);
 
 export default function ActivityModal(props: ModalProps) {
-    let {openModal, handleClose, data} = props;
-    useEffect(() => {
-        console.log(data);
-    }, [data]);
-    return (
-        <div>
-            <Dialog
-                onClose={() => handleClose}
-                maxWidth="md"
-                fullWidth
-                aria-labelledby="customized-dialog-title"
-                open={openModal}
-            >
-                <DialogTitle id="customized-dialog-title" onClose={() => handleClose}>
-                    {/* {type === "all" && "Appointment Title"}
-          {type === "doctor" && "Doctor Info"}
-          {type === "patient" && "Patient Info"} */}
-                </DialogTitle>
-                <DialogContent dividers>
-                    {/* {type == "all" && (
-            <Grid container spacing={3}>
-              <Grid item sm={12} className="appointment-list">
-                <AppointmentInfo selectedAppointment={data} />
-              </Grid>
-            </Grid>
-          )} */}
-
-                    <Grid container spacing={3}>
-                        {/* <Grid></Grid> */}
-                        {/* patient section start here */}
-                        {/* {(type === "all" || type === "patient") && (
-              <Grid sm={type == "all" ? 6 : 12} item>
-                {type === "all" && (
-                  <Typography variant="h5">Patient Info:</Typography>
-                )}
-                <PatientInfo
-                  patientInfo={
-                    (type === "patient" && userDetails ? userDetails : null) ||
-                    (type === "all" && data ? data.patient_details : null)
-                  }
-                />
-              </Grid>
-            )} */}
-                        {/* doctor section start here */}
-                        {/* {(type === "all" || type === "doctor") && (
-              <Grid sm={type == "all" ? 6 : 12} item>
-                {type === "all" && (
-                  <Typography variant="h5">Doctor Info:</Typography>
-                )}
-                <DoctorInfo
-                  doctorInfo={
-                    (type === "doctor" && userDetails ? userDetails : null) ||
-                    (type === "all" && data ? data.patient_details : null)
-                  }
-                />
-              </Grid>
-            )} */}
-                    </Grid>
-                </DialogContent>
-                <DialogActions>
-                    <Button autoFocus onClick={() => handleClose()} color="primary">
-                        Close
-                    </Button>
-                </DialogActions>
-            </Dialog>
-        </div>
-    );
+  let { openModal, handleClose, data } = props;
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
+  return (
+    <div>
+      <Dialog
+        onClose={() => handleClose}
+        maxWidth='md'
+        fullWidth
+        aria-labelledby='customized-dialog-title'
+        open={openModal}
+      >
+        <DialogTitle id='customized-dialog-title' onClose={() => handleClose}>
+          Audit Log
+        </DialogTitle>
+        <DialogContent dividers>
+          <Grid container spacing={3}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>
+                    <strong>Server Date/Time</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Method</strong>
+                  </TableCell>
+                  <TableCell>
+                    <strong>Details</strong>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                <TableCell>{data?.time}</TableCell>
+                <TableCell>{data?.endPoint}</TableCell>
+                <TableCell>{data?.userType}</TableCell>
+              </TableBody>
+            </Table>
+          </Grid>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={() => handleClose()} color='primary'>
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 }
