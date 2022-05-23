@@ -63,6 +63,11 @@ const states: ReactStateDeclaration[] = [
     name: "corporateaccount.**",
     lazyLoad: () => import("./CorporateAccount"),
   },
+  {
+    url: "/change-password",
+    name: "change-password.**",
+    lazyLoad: () => import("./ChangePassword"),
+  },
 ];
 
 states.forEach((state) => router.stateRegistry.register(state));

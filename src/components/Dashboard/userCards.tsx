@@ -1,8 +1,5 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-// import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
 import Typography from '@material-ui/core/Typography';
 import { Grid } from '@material-ui/core';
 import classNames from 'classnames';
@@ -13,9 +10,9 @@ const useStyles = makeStyles({
     background: "#d3d3d3"
   },
   bullet: {
-    display: 'inline-block',
-    margin: '0 2px',
-    transform: 'scale(0.8)',
+    display: "inline-block",
+    margin: "0 2px",
+    transform: "scale(0.8)",
   },
   title: {
     fontSize: 14,
