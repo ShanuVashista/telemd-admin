@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from "react";
 import {
   createStyles,
   Theme,
   withStyles,
   WithStyles,
-} from '@material-ui/core/styles';
-import MuiDialogContent from '@material-ui/core/DialogContent';
-import MuiDialogActions from '@material-ui/core/DialogActions';
-import MuiDialogTitle from '@material-ui/core/DialogTitle';
+} from "@material-ui/core/styles";
+import MuiDialogContent from "@material-ui/core/DialogContent";
+import MuiDialogActions from "@material-ui/core/DialogActions";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import {
   Button,
   Dialog,
@@ -19,7 +19,7 @@ import {
   TableHead,
   TableRow,
   Typography,
-} from '@material-ui/core';
+} from "@material-ui/core";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -28,7 +28,7 @@ const styles = (theme: Theme) =>
       padding: theme.spacing(2),
     },
     closeButton: {
-      position: 'absolute',
+      position: "absolute",
       right: theme.spacing(1),
       top: theme.spacing(1),
       color: theme.palette.grey[500],
@@ -53,10 +53,10 @@ const DialogTitle = withStyles(styles)((props: DialogTitleProps) => {
   const { children, classes, onClose, ...other } = props;
   return (
     <MuiDialogTitle disableTypography className={classes.root} {...other}>
-      <Typography variant='h6'>{children}</Typography>
+      <Typography variant="h6">{children}</Typography>
       {onClose ? (
         <IconButton
-          aria-label='close'
+          aria-label="close"
           className={classes.closeButton}
           onClick={onClose}
         >
@@ -85,16 +85,17 @@ export default function ActivityModal(props: ModalProps) {
   useEffect(() => {
     console.log(data);
   }, [data]);
+
   return (
     <div>
       <Dialog
         onClose={() => handleClose}
-        maxWidth='md'
+        maxWidth="md"
         fullWidth
-        aria-labelledby='customized-dialog-title'
+        aria-labelledby="customized-dialog-title"
         open={openModal}
       >
-        <DialogTitle id='customized-dialog-title' onClose={() => handleClose}>
+        <DialogTitle id="customized-dialog-title" onClose={() => handleClose}>
           Audit Log
         </DialogTitle>
         <DialogContent dividers>
@@ -122,7 +123,7 @@ export default function ActivityModal(props: ModalProps) {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button autoFocus onClick={() => handleClose()} color='primary'>
+          <Button autoFocus onClick={() => handleClose()} color="primary">
             Close
           </Button>
         </DialogActions>
