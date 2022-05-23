@@ -1,4 +1,4 @@
-import { ReactStateDeclaration} from "@uirouter/react";
+import { ReactStateDeclaration } from "@uirouter/react";
 import * as React from "react";
 import { useState } from "react";
 import {
@@ -14,26 +14,26 @@ import IconButton from "@material-ui/core/IconButton";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { Eye, EyeOff } from "react-feather";
 
-
 function ChangePassword() {
-
   const [loading, setLoading] = useState(false);
 
   const [params, setParams] = useState({
     currentPassword: "",
-    showCurrentPassword: false,
     newPassword: "",
     confirmNewPassword: "",
-    showConfirmNewPassword: false,
   });
+
+  const [showCurrentPassword, setShowCurrentPassword] =
+    useState<Boolean>(false);
+
+  const [showConfirmNewPassword, setShowConfirmNewPassword] =
+    useState<Boolean>(false);
 
   const clearValues = () => {
     setParams({
       currentPassword: "",
-      showCurrentPassword: false,
       newPassword: "",
       confirmNewPassword: "",
-      showConfirmNewPassword: false,
     });
   };
 
@@ -46,7 +46,7 @@ function ChangePassword() {
     });
   };
 
-  const getAppointments = async () => {
+  const changePassword = async () => {
     try {
       setLoading(true);
       const data = await $crud.post("user/password-change", params);
@@ -57,14 +57,11 @@ function ChangePassword() {
   };
 
   const handleClickShowPassword = () => {
-    setParams({ ...params, showCurrentPassword: !params.showCurrentPassword });
+    setShowCurrentPassword(showCurrentPassword === false ? true : false);
   };
 
   const handleClickShowConfirmNewPassword = () => {
-    setParams({
-      ...params,
-      showConfirmNewPassword: !params.showConfirmNewPassword,
-    });
+    setShowConfirmNewPassword(showConfirmNewPassword === false ? true : false);
   };
 
   const handleMouseDownPassword = (e) => {
@@ -79,7 +76,7 @@ function ChangePassword() {
             component={"form"}
             onSubmit={(e) => {
               e.preventDefault();
-              getAppointments();
+              changePassword();
             }}
           >
             <Grid
@@ -112,7 +109,7 @@ function ChangePassword() {
                       <TextField
                         fullWidth
                         size="small"
-                        type={params.showCurrentPassword ? "text" : "password"}
+                        type={showCurrentPassword ? "text" : "password"}
                         name="currentPassword"
                         variant="outlined"
                         value={params.currentPassword}
@@ -127,11 +124,7 @@ function ChangePassword() {
                                 onClick={handleClickShowPassword}
                                 onMouseDown={handleMouseDownPassword}
                               >
-                                {params.showCurrentPassword ? (
-                                  <Eye />
-                                ) : (
-                                  <EyeOff />
-                                )}
+                                {showCurrentPassword ? <Eye /> : <EyeOff />}
                               </IconButton>
                             </InputAdornment>
                           ),
@@ -162,9 +155,7 @@ function ChangePassword() {
                       <TextField
                         fullWidth
                         size="small"
-                        type={
-                          params.showConfirmNewPassword ? "text" : "password"
-                        }
+                        type={showConfirmNewPassword ? "text" : "password"}
                         variant="outlined"
                         placeholder="Confirm New Password"
                         value={params.confirmNewPassword}
@@ -179,11 +170,7 @@ function ChangePassword() {
                                 onClick={handleClickShowConfirmNewPassword}
                                 onMouseDown={handleMouseDownPassword}
                               >
-                                {params.showConfirmNewPassword ? (
-                                  <Eye />
-                                ) : (
-                                  <EyeOff />
-                                )}
+                                {showConfirmNewPassword ? <Eye /> : <EyeOff />}
                               </IconButton>
                             </InputAdornment>
                           ),
