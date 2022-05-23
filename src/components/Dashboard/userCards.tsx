@@ -4,11 +4,13 @@ import Card from '@material-ui/core/Card';
 // import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
+import { Grid } from '@material-ui/core';
+import classNames from 'classnames';
 
 const useStyles = makeStyles({
   root: {
     // minWidth: 155,
-    background:"#d3d3d3"
+    background: "#d3d3d3"
   },
   bullet: {
     display: 'inline-block',
@@ -23,29 +25,44 @@ const useStyles = makeStyles({
   },
 });
 
-export default function UserCard({title,appointments}) {
+export default function UserCard({ title, appointments, Titleicon }) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
 
   return (
-    <Card className={classes.root}>
-      <CardContent>
-        <Typography variant="h6" component="h2">
+    <Grid className={classNames("p-2 border")}>
+      <Grid container className='p-2-all' wrap='nowrap' >
+        <Grid>{Titleicon}</Grid>
+        <Typography variant="h6" component={Grid} item xs>
           {title}
-          <hr></hr>
         </Typography>
+      </Grid>
+      <Grid container className='p-2-all' wrap='nowrap'>
         <Typography component="h6">
-          Total :
+          Total : 
         </Typography>
+        <Typography>
+          5
+        </Typography>
+      </Grid>
+
+      <Grid container className='p-2-all' wrap='nowrap'>
         <Typography component="h6">
-          Corporate :
+          Corporate : 
         </Typography>
+        <Typography>
+          10
+        </Typography>
+      </Grid>
+      
+      <Grid container className='p-2-all' wrap='nowrap'>
         <Typography component="h6">
-          Pending :
+          Pending : 
         </Typography>
-        {/* <Typography className={classes.pos} color="textSecondary">
-        </Typography> */}
-      </CardContent>
-    </Card>
+        <Typography>
+          10
+        </Typography>
+      </Grid>
+    </Grid>
   );
 }
