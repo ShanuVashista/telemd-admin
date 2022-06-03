@@ -22,14 +22,12 @@ const useStyles = makeStyles({
   },
 });
 
-export default function UserCard({
+export default function PatientCard({
   title,
-  appointments,
   Titleicon,
-  doctorCorporate,
-  doctorTotal,
-  doctorPending,
-  doctorApproved,
+  patientCorporate,
+  patientPending,
+  patientTotal,
 }) {
   const classes = useStyles();
   const bull = <span className={classes.bullet}>•</span>;
@@ -44,22 +42,17 @@ export default function UserCard({
       </Grid>
       <Grid container className="p-2-all" wrap="nowrap">
         <Typography component="h6">Total :</Typography>
-        <Typography>{doctorTotal}</Typography>
+        <Typography>{patientTotal}</Typography>
       </Grid>
-
-      {/* <Grid container className="p-2-all" wrap="nowrap">
-        <Typography component="h6">Approved :</Typography>
-        <Typography>{doctorApproved}</Typography>
-      </Grid> */}
 
       <Grid container className="p-2-all" wrap="nowrap">
         <Typography component="h6">Corporate :</Typography>
-        <Typography>{doctorCorporate}</Typography>
+        <Typography>{patientCorporate}</Typography>
       </Grid>
 
       <Grid container className="p-2-all" wrap="nowrap">
         <Typography component="h6">Pending :</Typography>
-        <Typography>{doctorPending}</Typography>
+        <Typography>{patientPending}</Typography>
       </Grid>
     </Grid>
   );
