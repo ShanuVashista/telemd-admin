@@ -234,6 +234,7 @@ export function Dashboard() {
             </Grid>
           </Card>
         </Grid>
+        
         <Grid item xs={6}>
           <Card>
             <Grid container className="p-2-all border" wrap="nowrap">
