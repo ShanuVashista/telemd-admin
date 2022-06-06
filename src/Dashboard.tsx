@@ -1,23 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { ReactStateDeclaration } from "@uirouter/react";
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import React, {useEffect, useState} from "react";
+import {ReactStateDeclaration} from "@uirouter/react";
+import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import SimpleCard from "./components/Dashboard/cards";
-import { Card, Typography } from "@material-ui/core";
+import {Card, Typography} from "@material-ui/core";
 import UserCard from "./components/Dashboard/userCards";
 import PatientCard from "./components/Dashboard/PatientCard";
-import {
-  Users,
-  BookOpen,
-  Zap,
-  FastForward,
-  UserCheck,
-  UserX,
-  User,
-  Check,
-} from "react-feather";
-import { $crud } from "./factories/CrudFactory";
+import {BookOpen, Check, FastForward, User, UserCheck, Users, UserX} from "react-feather";
+import {$crud} from "./factories/CrudFactory";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
